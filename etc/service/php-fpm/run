@@ -1,0 +1,14 @@
+#! /bin/sh
+
+. /etc/envvars
+
+exec 2>&1
+set -e
+
+umask 022
+
+cd /var/www/html
+
+exec /usr/local/bin/docker-entrypoint.sh php-fpm -y /etc/php/php-fpm.conf
+
+
