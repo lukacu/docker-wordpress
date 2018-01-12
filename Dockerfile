@@ -14,4 +14,6 @@ RUN echo "define('DISABLE_WP_CRON', true);" >> /usr/src/wordpress/wp-config-samp
 
 VOLUME /var/www/html
 
+EXPOSE 80
+
 CMD ["/sbin/start_runit"]
