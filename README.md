@@ -1,5 +1,5 @@
 Dockerized Wordpress
 ====================
 
-This image is an extension of the default [Wordpress docker image](https://hub.docker.com/_/wordpress/) (alpine-fpm flavor) with added nginx and crond support for running wp-cron.php periodically.
+This image is an extension of the [nginx-php](https://hub.docker.com/lukacu/nginx-php/) image with Wordpress installed. It runs wp-cron.php periodically (daily) and can produce database dumps (daily).
 

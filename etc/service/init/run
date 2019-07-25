@@ -1,0 +1,52 @@
+#!/bin/bash -e
+
+printenv | sed 's/\([^=]\+\)=\(.*\)/export \1="\2"/g' > /env.sh
+
+if ! [ -e index.php -a -e wp-includes/version.php ]; then
+	echo >&2 "WordPress not found in $PWD - copying now..."
+	if [ "$(ls -A)" ]; then
+		echo >&2 "WARNING: $PWD is not empty - press Ctrl+C now if this is an error!"
+		( set -x; ls -A; sleep 10 )
+	fi
+	tar --create \
+		--file - \
+		--one-file-system \
+		--directory /usr/src/wordpress \
+		--owner "www-data" --group "www-data" \
+		. | tar --extract --file -
+	echo >&2 "Complete! WordPress has been successfully copied to $PWD"
+
+
+	uniqueEnvs=(
+		AUTH_KEY
+		SECURE_AUTH_KEY
+		LOGGED_IN_KEY
+		NONCE_KEY
+		AUTH_SALT
+		SECURE_AUTH_SALT
+		LOGGED_IN_SALT
+		NONCE_SALT
+	)
+	envs=(
+		WORDPRESS_DB_HOST
+		WORDPRESS_DB_USER
+		WORDPRESS_DB_PASSWORD
+		WORDPRESS_DB_NAME
+		"${uniqueEnvs[@]/#/WORDPRESS_}"
+		WORDPRESS_TABLE_PREFIX
+		WORDPRESS_DEBUG
+		WORDPRESS_CONFIG_EXTRA
+	)
+	haveConfig=
+	for e in "${envs[@]}"; do
+		file_env "$e"
+		if [ -z "$haveConfig" ] && [ -n "${!e}" ]; then
+			haveConfig=1
+		fi
+	done
+
+
+
+fi
+
+exit 0

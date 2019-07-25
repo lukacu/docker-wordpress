@@ -1,3 +1,0 @@
-# do daily/weekly/monthly maintenance
-# min   hour    day     month   weekday command
-0       2       *       *       *       curl http://localhost/wp-cron.php?doing_wp_cron > /dev/null 2>&1
