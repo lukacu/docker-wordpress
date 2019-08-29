@@ -32,11 +32,11 @@ RUN set -ex; \
 	echo "$WORDPRESS_SHA1 */usr/src/wordpress.tar.gz" | sha1sum -c -; \
 	chown -R www-data:www-data /usr/src/wordpress.tar.gz
 
-ADD etc/nginx/site/* /etc/nginx/site/
+COPY etc/nginx/site/* /etc/nginx/site/
 
-ADD etc/service/* /etc/service/
+COPY etc/service/init/* /etc/service/init/
 
-ADD scripts/* /
+COPY scripts/* /
 
 RUN chmod +x /backup.sh /wpcron.sh; \
     ln -s /backup.sh /etc/periodic/daily/databasebackup; \
