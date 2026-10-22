@@ -8,10 +8,11 @@ RUN set -ex; \
 	apk add --no-cache --virtual .build-deps \
 		libjpeg-turbo-dev \
 		libpng-dev \
+		libzip-dev \
 	; \
 	\
-	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
-	docker-php-ext-install gd mysqli opcache zip; \
+	docker-php-ext-configure gd --with-jpeg; \
+	docker-php-ext-install gd zip; \
 	\
 	runDeps="$( \
 		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
@@ -24,8 +25,8 @@ RUN set -ex; \
 
 VOLUME /var/www/html
 
-ENV WORDPRESS_VERSION 5.2.2
-ENV WORDPRESS_SHA1 3605bcbe9ea48d714efa59b0eb2d251657e7d5b0
+ENV WORDPRESS_VERSION=7.1.3
+ENV WORDPRESS_SHA1=491a78c7676b15dffcc69130c6054b8f49228a91
 
 RUN set -ex; \
 	curl -o /usr/src/wordpress.tar.gz -fSL "https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz"; \
